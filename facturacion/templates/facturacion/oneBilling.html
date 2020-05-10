@@ -1,0 +1,90 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Listado de Compras</title>
+    <link rel="stylesheet" href="{% static 'base/css/receipt.css' %}">
+    <style type="text/css">
+        @page {
+            width: 58mm; 
+            size: auto;   
+            margin: 0mm;
+        }
+    </style>
+</head>
+<body onload="window.print();window.close()" class="receipt">
+    <div class="col-md-1 col-sm-1 col-xs-1 col-xl-1">
+        <center>
+            <b class="text-center">MASH DEVS</b><br> 
+            <small>Address</small><br>
+            <small>Billing Number: {{ head.billing }}</small><br>
+        </center>
+        <small>
+            <br>
+            <b>Billing Number:</b>&nbsp;&nbsp;{{ head.id }}&nbsp;&nbsp;
+            <b>Billing Date:</b>&nbsp;&nbsp;{{ head.date }}&nbsp;&nbsp; <br>
+            <b>Customer:</b>&nbsp;&nbsp;{{ head.customer.id }}&nbsp;&nbsp;- {{ head.customer }}<br>
+            <br><br>
+        </small>
+        <table class="table table-condensed table-sm" width="60%">
+            <thead>
+                <th>Code</th>
+                <th  align='right'>Amount</th>
+                <th  align='right'>Unit Price</th>
+                <th  align='right'>Subtotal</th>
+                <th  align='right'>Discount</th>
+                <th  align='right'>Total</th>
+            </thead>
+            <tbody>
+                {% for obj in detail %}
+                <tr>
+                    <td>{{ obj.product.id }}</td>
+                    <td>{{ obj.amount }}</td>
+                    <td>{{ obj.price }}</td>
+                    <td>{{ obj.subtotal }}</td>
+                    <td>{{ obj.discount }}</td>
+                    <td>{{ obj.total }}</td>
+                </tr>
+                <tr>
+                    <td colspan="5">{{ obj.product }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="col-xs-1"></div>
+        <div class="col-xs-11">
+            <div class="pull-right">
+            <table class="table-responsive dt-responsive nowrap">
+                <thead>
+                    <th colspan=2>Totals</th>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Subtotal:</td> <td align='right'>{{ head.subtotal }}</td>
+                    </tr>
+                    <tr>
+                        <td>IVA:</td> <td align='right'>{{ head.discount }}</td>
+                    </tr>
+                    <tr>
+                        <td>Total:</td> <td align='right'><b>{{ head.total }}</b></td>
+                    </tr>
+                </tbody>
+            </table>
+            </div>
+        </div>
+        <div class="row">
+        <small class="pie">
+            <br><br>
+            <center>
+                Created by:  {{ head.userCreator }} - Fecha:  {{ head.creationDate }}
+                <br>
+                <i>&copy; &reg; <b>MASH DEVS</b><br> - qk.leugim@gmail.com</i> 
+            </center>
+        </small>
+        </div>
+    </div>
+</body>
+</html>

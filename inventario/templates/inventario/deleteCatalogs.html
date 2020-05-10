@@ -1,0 +1,26 @@
+{% extends 'base/base.html' %}{% block page_content %}
+<!-- Earnings (Monthly) Card Example -->
+<form method="POST" class="form-inline">
+    {% csrf_token %}
+    <div class="auto">
+        <div class="card border-left-danger shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-s text-black font-weight-bold text-uppercase mb-1" style="text-align: center">
+                            Are you sure that you want to delete "{{ obj.description }}"?
+                        </div>
+                        <center>
+                            <button type="submit" class="btn btn-success"><i class="fas fa-trash"></i> Yes, delete</button>
+                            <a href="{{ request.META.HTTP_REFERER }}" class="btn btn-danger"><span class="fa fa-times"></span> Cancel</a>
+                        </center>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-exclamation-triangle fa-2x text-danger"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+{% endblock page_content %}{% block js_page %}{% endblock js_page %}

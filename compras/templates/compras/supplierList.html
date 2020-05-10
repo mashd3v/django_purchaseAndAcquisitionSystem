@@ -1,0 +1,71 @@
+{% extends 'base/base.html' %} {% block page_content %}
+<div class="card shadow mb-4">
+    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+        <h5 class="m-0 font-weight-bold text-primary">Supplier List</h5>
+        <!--<div class="dropdown no-arrow">
+            Actions
+            <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
+                <div class="dropdown-header">Actions</div>
+                <a class="dropdown-item" onclick="return openModal('{% url 'compras:newSupplier' %}')" href="#"><i class="far fa-calendar-plus"></i> New</a>
+            </div>
+        </div>-->
+    </div>
+    <div class="card-body">
+        {% if not obj %}
+        <div class="alert alert-info">Empty</div>
+        {% else %}
+        <div class="buttons-toolbar">
+            <a class="btn" onclick="return openModal('{% url 'compras:newSupplier' %}')" href="#"><i class="fa fa-plus"></i> New</a>
+        </div>
+        <table 
+            data-toggle="table" 
+            data-pagination="true" 
+            data-search="true" 
+            data-show-columns="true" 
+            data-show-toggle="true"
+            data-toolbar=".buttons-toolbar"
+        >
+            <thead>
+                <th>ID</th>
+                <th>Description</th>
+                <th>Address</th>
+                <th>Contact</th>
+                <th>Phone</th>
+                <th>EMail</th>
+                <th>Status</th>
+                <th class="all">Actions</th>
+            </thead>
+            <tbody>
+                {% for item in obj %}
+                <tr>
+                    <td>{{ item.id }}</td>
+                    <td>{{ item.description }}</td>
+                    <td>{{ item.address }}</td>
+                    <td>{{ item.contact }}</td>
+                    <td>{{ item.phone }}</td>
+                    <td>{{ item.email }}</td>
+                    <td>{{ item.status|yesno:"Active, Inactive" }}</td>
+                    <td>
+                        <center>
+                            <button onclick="return openModal('{% url 'compras:updateSupplier' item.id %}')" class="btn btn-warning btn-circle"><i class="far fa-edit"></i></button>
+                            <button onclick="return openModal('{% url 'compras:deactivateSuppliers' item.id %}')" class="btn btn-danger btn-circle"><i class="far fa-thumbs-down"></i></button>
+                        </center>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
+    </div>
+</div>
+{% endblock page_content %} {% block js_page %}
+<script>
+    /* Call the dataTables jQuery plugin
+    $(document).ready(function() {
+        $('.table').DataTable();
+    });*/
+</script>
+{% endblock js_page %}

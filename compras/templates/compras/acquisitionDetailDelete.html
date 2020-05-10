@@ -1,0 +1,36 @@
+<div class="modal-dialog modal-auto">
+    <div class="modal-content">
+        <form role="form" action="{% url 'compras:deleteAcquisition' obj.acquisition.id obj.pk %}" method="post"  class="form-inline">
+            <div class="col-xl-12 col-md-12 mb-12">
+                <div class="card border-left-danger shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                            Delete Detail
+                        </div>
+                        <div class="dropdown-divider"></div>
+                        {% csrf_token %}
+                        <div class="row">
+                            Delete {{ obj.product }} from acquisition number {{ obj.acquisition.id}}?
+                        </div>
+                        <div class="dropdown-divider"></div>
+                        <div class="row">
+                            <div class="col">
+                                <center>
+                                    <button type="submit" class="btn btn-success"><span class="fas fa-trash"></span> Yes, Delete</button>
+                                    <button type="button" class="btn btn-danger" onclick="return closeModal()"><span class="fas fa-times"></span> Cancel</button>
+                                </center>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-exclamation-triangle fa-2x text-danger"></i>
+                    </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div> 

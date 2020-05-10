@@ -1,0 +1,99 @@
+{% extends 'base/base.html' %} {% block page_content %}
+<div class="card shadow mb-4">
+    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+        <h5 class="m-0 font-weight-bold text-primary">Customer List</h5>
+        <!--<div class="dropdown no-arrow">
+            Actions
+            <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
+                <div class="dropdown-header">Actions</div>
+                <a class="dropdown-item" onclick="return openModal('{% url 'facturacion:newCustomer' %}')" href="#"><i class="far fa-calendar-plus"></i> New</a>
+            </div>
+        </div>-->
+    </div>
+    <div class="card-body">
+        {% if not obj %}
+        <div class="alert alert-info">Empty</div>
+        {% else %}
+        <div class="buttons-toolbar">
+            <a class="btn" onclick="return openModal('{% url 'facturacion:newCustomer' %}')" href="#"><i class="fa fa-plus"></i> New</a>
+        </div>
+        <table 
+            data-toggle="table" 
+            data-pagination="true" 
+            data-search="true" 
+            data-show-columns="true" 
+            data-show-toggle="true"
+            data-toolbar=".buttons-toolbar"
+        >
+            <thead>
+                <th data-sortable="true" data-field="id">ID</th>
+                <th data-sortable="true" data-field="names">Names</th>
+                <th data-sortable="true" data-field="lastNames">Last Names</th>
+                <th data-sortable="true" data-field="customerType">Customer Type</th>
+                <th data-sortable="true" data-field="phone">Phone</th>
+                <th data-field="status">Status</th>
+                <th class="all">Actions</th>
+            </thead>
+            <tbody>
+                {% for item in obj %}
+                <tr>
+                    <td>{{ item.id }}</td>
+                    <td>{{ item.names }}</td>
+                    <td>{{ item.lastNames }}</td>
+                    <td>{{ item.customerType }}</td>
+                    <td>{{ item.phone }}</td>
+                    <td>
+                        <div onclick="deactivate({{ item.id }})">
+                            {% if item.status %}
+                                <i class="far fa-thumbs-up text-success"></i>
+                            {% else %}
+                                <i class="far fa-thumbs-down text-danger"></i>
+                            {% endif %}
+                        </div>
+                    </td>
+                    <td>
+                        <center>
+                            <button onclick="return openModal('{% url 'facturacion:updateCustomer' item.id %}')" class="btn btn-warning btn-circle"><i class="far fa-edit"></i></button>
+                        </center>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
+    </div>
+</div>
+{% endblock page_content %} {% block js_page %}
+<script>
+    function deactivate(id){
+        var data = {id:id};
+        data = JSON.stringify(data);
+        var token = '{{ csrf_token }}';
+        $.ajax({
+            headers: {"X-CSRFToken": token},
+            type: "POST",
+            url: "/facturacion/customer/status/" + id,
+            data: data,
+            success: function(response){
+                if(response==="OK"){
+                    location.reload(true);
+                } else{
+                    message("An error has ocurred trying to change the customer status");
+                }
+            },
+            error: function(jqXHR, textStatus, errorThrow){
+                console.log(textStatus, errorThrow);
+                message(errorThrow, 'red');
+                closeModal();
+            }
+        });
+    }
+    /* Call the dataTables jQuery plugin
+    $(document).ready(function() {
+        $('.table').DataTable();
+    });*/
+</script>
+{% endblock js_page %}

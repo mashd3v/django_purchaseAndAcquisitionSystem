@@ -1,0 +1,68 @@
+<div class="modal-dialog modal-lg">
+    <div class="modal-content">
+        {% if obj %}
+        <form method="POST" role="form" class="form-inline" action="{% url 'compras:updateSupplier' obj.pk %}">
+        {% else %}
+        <form method="POST" role="form" class="form-inline" action="{% url 'compras:newSupplier' %}">
+        {% endif %}
+                <div class="col-xl-12 col-md-12 mb-12">
+                    {% if obj %}
+                    <div class="card border-left-warning shadow h-100 py-2">
+                        {% else %}
+                        <div class="card border-left-success shadow h-100 py-2">
+                            {% endif %}
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="text-s font-weight-bold text-primary text-uppercase mb-1" style="text-align: center;">
+                                            {% if obj %} Edit {% else %} New {% endif %} Supplier
+                                        </div>
+                                        <div class="dropdown-divider"></div>
+                                        {% csrf_token %}
+                                        <div class="row">
+                                            {{ form.as_p }}
+                                        </div>
+                                        <div class="dropdown-divider"></div>
+                                        <div class="row">
+                                            <div class="col">
+                                                <center>
+                                                    <button type="submit" class="btn btn-success"><span class="fa fa-save"></span> Save</button>
+                                                    <button type="button" class="btn btn-danger" onclick="return closeModal()"><span class="fa fa-times"></span> Cancel</button>
+                                                </center>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </form>
+    </div>
+</div>
+<script>
+    var url = $("form").attr("action");
+    var token = jQuery("[name-csrfmiddlewaretoken]").val();
+    $(function(){
+        $("form").submit(function(e){
+            e.preventDefault();
+            var formData = $("form").serializeArray();
+            $.ajax({
+                url:url,
+                method:"POST",
+                headers:{'X-CSRFToken': token},
+                data:formData
+            })
+            .done(function(r, textStatus, xhr){
+                if(xhr.status=200){
+                    location.reload(true);
+                }else{
+                    message(textStatus);
+                }
+            })
+            .fail(function(error){
+                message(error.responseText);
+            });
+        });
+    });
+</script>

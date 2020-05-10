@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acquisition List</title>
+    <style type="text/css">
+    @page {
+        size: letter;
+        margin: 1cm;
+    }
+    .table, td, .number{
+        text-align: center;
+    }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="card-header">
+                <center>
+                    <h2>MASH ACQUISITION SYSTEM</h2>
+                </center>
+            </div>
+            <div class="list-group">
+                <p>Bill Number: {{ header.id }}</p>
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <td>Supplier:</td>
+                            <td>{{ header.supplier }}</td>
+                            <td>Acquisition Date:</td>
+                            <td>{{ header.acquisitionDate }}</td>
+                        </tr>
+                        <tr>
+                            <td>Bill Number</td>
+                            <td>{{ header.billNumber }}</td>
+                            <td>Bill Date:</td>
+                            <td>{{ header.billDate }}</td>
+                        </tr>
+                        <tr>
+                            <td>Observation:</td>
+                            <td colspan="3">{{ header.observation }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <hr>
+            </div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Amount</th>
+                        <th>Price</th>
+                        <th>Subtotal</th>
+                        <th>Discount</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in detail %}
+                    <tr>
+                        <td><span class="small">{{ item.product }}</span></td>
+                        <td class="number">{{ item.amount }}</td>
+                        <td class="number">${{ item.supplierPrice }}</td>
+                        <td class="number">${{ item.subtotal }}</td>
+                        <td class="number">${{ item.discount }}</td>
+                        <td class="number">${{ item.total }}</td>        
+                    </tr>
+                    {% endfor %}
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td><h4>Subtotal</h4></td>
+                        <td class="number"><h4>{{ header.subtotal}}</h4></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td><h4>Discount</h4></td>
+                        <td class="number"><h4>{{ header.discount}}</h4></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td><h4>Total</h4></td>
+                        <td class="number"><h4>{{ header.total}}</h4></td>
+                    </tr>
+                </tbody>
+            </table>
+            <hr>
+        </div>
+    </div>
+</body>
+</html>

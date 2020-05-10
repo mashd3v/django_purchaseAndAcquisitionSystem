@@ -1,0 +1,83 @@
+{% extends 'base/base.html' %} {% block page_content %}
+<div class="card shadow mb-4">
+    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+        <h5 class="m-0 font-weight-bold text-primary">Billing List</h5>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-4">
+                <input type="text" class="form-class" name="date1" id="date1" placeholder="Pick a date" readonly>
+            </div>
+            <div class="col-md-4">
+                <input type="text" class="form-class" name="date2" id="date2" placeholder="Pick a date" readonly>
+            </div>
+            <div class="col-md-4">
+                <button class="btn btn-warning" type="button" id="btnPrint">Print</button>
+            </div>
+        </div>
+        <hr>
+        {% if not obj %}
+        <div class="alert alert-info">Empty</div>
+        {% endif %}
+        <div class="buttons-toolbar">
+            <a class="btn" href="{% url 'facturacion:newBilling' %}"><i class="fa fa-plus"></i> New</a>
+        </div>
+        <table 
+            data-toggle="table" 
+            data-pagination="true" 
+            data-search="true" 
+            data-show-columns="true" 
+            data-show-toggle="true"
+            data-toolbar=".buttons-toolbar"
+        >
+            <thead>
+                <th data-sortable="true" data-field="id">Bill Number</th>
+                <th data-sortable="true" data-field="customer">Customer</th>
+                <th data-sortable="true" data-field="total">Total</th>
+                <th data-field="status">Status</th>
+                <th class="all">Actions</th>
+            </thead>
+            <tbody>
+                {% for item in obj %}
+                <tr>
+                    <td>{{ item.id }}</td>
+                    <td>{{ item.customer }}</td>
+                    <td>{{ item.total }}</td>
+                    <td>{{ item.status|yesno:"Active, Inactive" }}</td>
+                    <td>
+                        <center>
+                            <a href="{% url 'facturacion:updateBilling' item.id %}" class="href btn btn-warning btn-circle"><i class="far fa-edit"></i></a>
+                        </center>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock page_content %} 
+{% block js_page %}
+<script>
+    $(function(){
+        $("#date1, #date2").datetimepicker({
+            format: 'Y-m-d',
+            timepicker: false
+        });
+        $("#btnPrint").click(function(e){
+            e.preventDefault();
+            var date1, date2;
+            date1 = $("#date1").val();
+            date2 = $("#date2").val();
+            if(date1=="" || date1==null){
+                date1 = ""
+            }
+            if(date2=="" || date2==null){
+                var d = new Date();
+                var date2 = d.getFullYear() + "-" + (d.getMonth()+1) + "-" + d.getDate();
+            }
+            var url = "printAll/" + date1 + "/" + date2;
+            window.open(url, 'facturas');
+        });
+    });
+</script>
+{% endblock js_page %}

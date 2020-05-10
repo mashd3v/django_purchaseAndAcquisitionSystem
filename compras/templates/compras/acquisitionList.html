@@ -1,0 +1,76 @@
+{% extends 'base/base.html' %} {% block page_content %}
+<div class="card shadow mb-4">
+    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+        <h5 class="m-0 font-weight-bold text-primary">Acquisition List</h5>
+        <!--<div class="dropdown no-arrow">
+            Actions
+            <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
+                <div class="dropdown-header">Actions</div>
+                <a class="dropdown-item" href="{% url 'compras:acquisitionNew' %}"><i class="far fa-calendar-plus"></i> New</a>
+                <a class="dropdown-item" href="{% url 'compras:printAllAcquisitions' %}" target="reports"><i class="fas fa-print"></i> List</a>
+            </div>
+        </div>-->
+    </div>
+    <div class="card-body">
+        {% if not obj %}
+        <div class="alert alert-info">Empty</div>
+        {% else %}
+        <div class="buttons-toolbar">
+            <a class="btn" onclick="return openModal('{% url 'compras:acquisitionNew' %}')" href="#"><i class="fa fa-plus"></i> New</a>
+            <a class="btn" href="{% url 'compras:printAllAcquisitions' %}" target="reports"><i class="fas fa-print"></i> Print All</a>
+        </div>
+        <table 
+            data-toggle="table" 
+            data-pagination="true" 
+            data-search="true" 
+            data-show-columns="true" 
+            data-show-toggle="true"
+            data-toolbar=".buttons-toolbar"
+        >
+            <thead>
+                <th>ID</th>
+                <th>Acquisition Date</th>
+                <th>Observation</th>
+                <th>Bill Number</th>
+                <th>Bill Date</th>
+                <th>Subtotal</th>
+                <th>Discount</th>
+                <th>Total</th>
+                <th>Status</th>
+                <th class="all">Actions</th>
+            </thead>
+            <tbody>
+                {% for item in obj %}
+                <tr>
+                    <td>{{ item.id }}</td>
+                    <td>{{ item.acquisitionDate }}</td>
+                    <td>{{ item.observation }}</td>
+                    <td>{{ item.billNumber }}</td>
+                    <td>{{ item.billDate }}</td>
+                    <td>{{ item.subtotal }}</td>
+                    <td>{{ item.discount }}</td>
+                    <td>{{ item.total }}</td>
+                    <td>{{ item.status|yesno:"Active, Inactive" }}</td>
+                    <td>
+                        <center>
+                            <a class='btn btn-warning btn-circle' href="{% url 'compras:updateAcquisition' item.id %}"><i class="far fa-edit"></i></a>
+                            <a class='btn btn-success btn-circle' href="{% url 'compras:printOneAcquisition' item.id %}" target="reports"><i class="fas fa-print"></i></a>
+                        </center>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
+    </div>
+</div>
+{% endblock page_content %} {% block js_page %}
+<script>
+    /*$(document).ready(function() {
+        $('.table').DataTable();
+    });*/
+</script>
+{% endblock js_page %}

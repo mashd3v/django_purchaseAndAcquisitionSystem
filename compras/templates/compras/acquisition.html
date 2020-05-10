@@ -1,0 +1,284 @@
+{% extends 'base/base.html'%}
+{% block page_content %}
+    <form method="post" id="formAcquisitions">
+        {% csrf_token %}
+        <div class="col-xl-12 col-md-12 mb-12">
+            {% if header %}
+            <div class="card border-left-warning shadow h-100 py-2">
+            {% else %}
+            <div class="card border-left-success shadow h-100 py-2">
+            {% endif %}
+                <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                    {% if header %} Edit {% else %} New {% endif %} Acquisition
+                                </div>
+                                <div class="dropdown-divider"></div>
+                                <div class="row">
+                                    <!-- Inicio Izquierda -->
+                                    <div class="col-6">
+                                        <!-- Inicio Encabezado -->
+                                        <div class="form-group row">
+                                            <label for="staticEmail" class="col-sm-2 col-form-label">Supplier:</label>
+                                            <div class="col-sm-10">
+                                              {{ form_header.supplier }}
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <div class="form-group">
+                                                    <label for="id_fecha_compra">Acquisition Date:</label>
+                                                    {{ form_header.acquisitionDate }}
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="id_descripcion">Description:</label>
+                                                    {{ form_header.observation }}
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="form-group">
+                                                    <label for="id_fecha_compra">Bill Number:</label>
+                                                    {{ form_header.billNumber }}
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="id_descripcion">Bill Date:</label>
+                                                    {{ form_header.billDate }}
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <label for="Sub Total">Subtotal:</label>
+                                                    </div>
+                                                    <div class="col">
+                                                        {{ form_header.subtotal }}
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <label for="sub_total">Discount:</label>
+                                                    </div>
+                                                    <div class="col">
+                                                        {{ form_header.discount }}
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <label for="total">Total:</label>
+                                                    </div>
+                                                    <div class="col">
+                                                        {{ form_header.total }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Fin Encabezado -->
+                                    </div>
+                                    <!-- Fin Izquierda -->
+                                    <!-- Inicio Derecha -->
+                                    <div class="col-6">
+                                        <div class="row">
+                                            <div class="col">
+                                                <table class="table table-striped table-hover dt-responsive table-sm nowrap tbl-productos" style="width:100%">
+                                                    <thead>
+                                                        <th>Id</th>        
+                                                        <th class="all">Description</th>
+                                                        <th class="all">Actions</th>
+                                                    </thead>
+                                                    <tbody>
+                                                        {% for item in products %}
+                                                        <tr>
+                                                        <td>{{ item.id }}</td>
+                                                        <td>{{ item.description }}</td>
+                                                        <td>
+                                                            <button type="button" class="btn btn-warning btn-circle"
+                                                            onclick="selectProduct({{ item.id }},'{{ item.description }}')"><i class="far fa-hand-pointer"></i></button>
+                                                        </td>
+                                                        </tr>
+                                                        {% endfor %}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="id_id_product" class="col-sm-3 col-form-label">Product</label>
+                                            <div class="col-sm-2">
+                                                <input type="text" readonly class="form-control-plaintext" name="id_id_product" id="id_id_product" value="" required>
+                                            </div>
+                                            <div class="col-sm-7">
+                                                <input type="text" readonly class="form-control-plaintext" id="id_product_description" value="" required>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="id_amount_detail" class="col-sm-2 col-form-label">Amount:</label>
+                                            <div class="col-sm-2">
+                                                <input type="number" class="form-control" name="id_amount_detail" id="id_amount_detail" value="00" required>
+                                            </div>
+                                            <label for="id_price_detail" class="col-sm-2 col-form-label">Price:</label>
+                                            <div class="col-sm-2">
+                                                <input type="number" class="form-control" name="id_price_detail" id="id_price_detail" value="00" required>
+                                            </div>
+                                            <label for="id_discount_detail" class="col-sm-2 col-form-label">Discount:</label>
+                                            <div class="col-sm-2">
+                                                <input type="text" class="form-control" name="id_discount_detail" id="id_discount_detail" value="00">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">Subtotal:</label>
+                                            <div class="col-sm-4">
+                                                <input type="text" readonly class="form-control-plaintext" name="id_subtotal_detail" id="id_subtotal_detail" value="00">
+                                            </div>
+                                            <label for="id_total_detail" class="col-sm-2 col-form-label">Total:</label>
+                                            <div class="col-sm-3">
+                                                <input type="text" readonly class="form-control-plaintext col-sm-10" name="id_total_detail" id="id_total_detail" value="00">
+                                            </div>
+                                            <div class="col-sm-1">
+                                                <button type="button" class="btn btn-sm col-sm-2" onclick="clearDetail();"><i class="fa fa-minus-circle" aria-hidden="true"></i></button>
+                                            </div>
+                                        </div>
+                                        <!-- Botones -->
+                                        <div class="dropdown-divider"></div>
+                                        <div class="row">
+                                            <div class="col">
+                                                <button type="submit" class="btn btn-success"><span class="fa fa-save"></span> Save</button>
+                                                <a href="{% url 'compras:acquisitionList' %}" class="btn btn-danger"><i class="fa fa-times"></i> Cancel</a>
+                                            </div>
+                                        </div>
+                                        <!-- Fin Botones -->
+                                    </div>
+                                    <!-- Fin Derecha -->
+                                </div>
+                                <!-- Inicio Detalle -->
+                                <div class="row">
+                                    <div class="col">
+                                        <table class="table table-striped table-hover dt-responsive nowrap" style="width:100%">
+                                            <thead>
+                                                <th>Product</th>        
+                                                <th>Amount</th>
+                                                <th>Price</th>
+                                                <th>Subtotal</th>
+                                                <th>Discount</th>
+                                                <th>Total</th>
+                                                <th class="all">Actions</th>
+                                            </thead>
+                                            <tbody>
+                                                {% for item in detail %}
+                                                <tr>
+                                                <td>{{ item.product }}</td>
+                                                <td>{{ item.amount }}</td>
+                                                <td>{{ item.supplierPrice }}</td>
+                                                <td>{{ item.subtotal }}</td>
+                                                <td>{{ item.discount }}</td>
+                                                <td>{{ item.total }}</td>
+                                                <td>
+                                                    <button class="btn btn-danger btn-circle" onclick="return openModal('{% url 'compras:deleteAcquisition' header.pk item.id %}')"><i class="fas fa-trash-alt"></i></button>
+                                                </td>
+                                                </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <!-- Fin Detalle -->
+                            </div>
+                        </div>
+                </div>
+        </div>
+    </form>
+{% endblock %}
+{% block js_page %}
+<script>
+    $(function () {
+        $("#id_acquisitionDate, #id_billDate").datetimepicker({
+            format: 'Y-m-d',
+            timepicker:false
+        });
+
+        /*
+        $("#sidebarToggle").click();
+        */
+        $('.table').DataTable({
+            "pageLength": 2,
+        });
+        
+        $('#id_amount_detail, #id_price_detail, #id_discount_detail').change(function(){
+            calculateDetail();
+        });
+
+        /*Validar Envío de Detalle */
+        
+        $("#formAcquisitions").submit(function(e){
+            if($('#id_total_detail').val()==0 || $('#id_id_product').val()==0 ){
+                e.preventDefault();
+                //alert("No ha agregado producto o está sin cantidades");
+                $.alert({
+                        type:'red',
+                        title:'',
+                        content:"You needo to fill:<br>- Amount<br>- Price"
+                        })
+            }
+        });
+        /*Fin Validar Envío de Detalle */
+
+    });
+    function selectProduct(id, description) {
+        $("#id_amount_detail").val(0);
+        $('#id_price_detail').val(0);
+        $('#id_discount_detail').val(0);
+
+        $('#id_subtotal_detail').val(0);
+        $('#id_total_detail').val(0);
+
+        $("#id_id_product").val(+id);
+        $('#id_product_description').val(description);
+        $('#id_amount_detail').focus();
+        $('#id_amount_detail').select();
+
+        $('.table').DataTable().search('').draw();
+    }
+    
+
+    function calculateDetail() {
+        var amount, price, discount, subtotal, total;
+
+        amount = $("#id_amount_detail").val();
+        amount = amount==="" ? 0 : +amount;
+        amount = amount<0 ? 0 : amount;
+
+        price =$('#id_price_detail').val();
+        price = price==="" ? 0 : +price;
+        price = price<0 ? 0 : price;
+
+        discount = $('#id_discount_detail').val();
+        discount = discount==="" ? 0 : +discount;
+        discount = discount<0 ? 0 : discount;
+
+        discount = discount>(amount * price) ? 0 : discount;
+
+        subtotal = amount * price;
+        total  = subtotal - discount;
+
+        $('#id_amount_detail').val(amount);
+        $('#id_preice_detail').val(price);
+        $('#id_discount_detail').val(discount);
+
+        $('#id_subtotal_detail').val(subtotal);
+        $('#id_total_detail').val(total);
+    }
+
+    function clearDetail(){
+        $('#id_amount_detail').val(0);
+        $('#id_price_detail').val(0);
+        $('#id_discount_detail').val(0);
+
+        $('#id_subtotal_detail').val(0);
+        $('#id_total_detail').val(0);
+
+        $('#id_id_product').val('');
+        $('#id_product_description').val('');
+
+        $('.table').DataTable().search('').draw();
+
+        $("#id_supplier").focus();
+    }
+    $("#id_supplier").focus();
+</script>
+{% endblock %}

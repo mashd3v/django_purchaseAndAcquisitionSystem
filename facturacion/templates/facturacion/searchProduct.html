@@ -1,0 +1,92 @@
+<div class="modal-dialog modal-lg">
+    <div class="modal-content">
+        <div class="col-xl-12 col-md-12 mb-12">
+            <div class="card border-left-warning shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                            Search Product
+                        </div>
+                        <div class="dropdown-divider"></div>
+                        <div class="row">
+                                <table
+                                    id="tblProduct" 
+                                    data-toggle="table" 
+                                    data-pagination="true" 
+                                    data-search="true" 
+                                    data-show-columns="true" 
+                                    data-show-toggle="true"
+                                    data-toolbar=".buttons-toolbar"
+                                >
+                                <thead>
+                                  <th data-sortable="true" data-field="id">Id</th>        
+                                  <th data-sortable="true" data-field="code">Code</th>
+                                  <th data-sortable="true" data-field="barCode">Bar Code</th>
+                                  <th data-field="description">Description</th>
+                                  <th data-field="stock">Stock</th>
+                                  <th data-field="price">Price</th>
+                                  <th class="all">Actions</th>
+                                </thead>
+                                <tbody>
+                                  {% for item in obj%}
+                                  <tr>
+                                    <td>{{ item.id }}</td>
+                                    <td>{{ item.code }}</td>
+                                    <td>{{ item.barCode }}</td>
+                                    <td>{{ item.description }}</td>
+                                    <td>{{ item.stock }}</td>
+                                    <td>{{ item.price }}</td>
+                                    <td>
+                                        {% if item.stock > 0 and item.status %}
+                                        <button class="btn btn-warning btn-circle" id="btnSelect" 
+                                        onclick="selectProduct({{ item.id }},'{{ item.code }}','{{ item.description }}',{{ item.price }})">
+                                            <i class="far fa-hand-pointer"></i>
+                                        </button>
+                                        {% endif %}
+                                    </td>
+                                  </tr>
+                                  {% endfor %}
+                                </tbody>
+                              </table>
+                        </div>
+                        <div class="dropdown-divider"></div>
+                        <div class="row">
+                            <div class="col">
+                                <!-- <button type="submit" class="btn btn-danger"><span class="fa fa-save"></span> Guardar</button> -->
+                                <button type="button" id="btnCancel" class="btn btn-danger">
+                                        <!-- onclick="return cerrar_modal()" -->
+                                        Cancel
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="far fa-calendar-plus fa-2x text-gray-300"></i>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 
+{% block js_page %}
+<script>
+    $(function () {
+
+        $("#btnCancel").click(function(e){
+            e.preventDefault();
+            closeModal();
+        });
+    });
+    $('#tblProduct').bootstrapTable();
+    function selectProduct(id, code, description, price){
+        $("#code").val(code);
+        $("#description").val(description);
+        $("#price").val(price);
+        $("#btnCancel").click();
+        $("#code").select();
+        $("#code").focus();
+    }
+</script>
+{% endblock %}
