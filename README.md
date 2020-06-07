@@ -1,6 +1,11 @@
-# CompraYFacturacion_dj_2.2
-Purchasing and billing system with django 2.2
-<h4>Try it:</h4>
-<p>https://mashd3v.pythonanywhere.com
-<p>User: admin
-<p>Password: dmn@2020
+# Purchasing and billing system
+
+This system was created with Django 2.2
+
+## Try it
+
+Url: https://mashd3v.pythonanywhere.com
+
+User: admin
+
+Password: dmn@2020
